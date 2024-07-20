@@ -5,7 +5,18 @@ import random
 
 # TODO: section a : 3
 def smart_heuristic(env: WarehouseEnv, robot_id: int):
-    pass
+    robot = env.get_robot(robot_id)
+    other_robot = env.get_robot((robot_id + 1) % 2)
+    pos_packages = [package.position for package in env.packages]
+    dest_packages = [package.destination for package in env.packages]
+
+    dist_rob1 = min([manhattan_distance(robot.position, pos) for pos in pos_packages])
+    dist_rob2 = min([manhattan_distance(other_robot.position, pos) for pos in pos_packages])
+    if robot.package != None and robot.position == robot.package.destination:
+        return 100
+
+    return (robot.battery - other_robot.battery) + (robot.credit - other_robot.credit) + (dist_rob2 - dist_rob1)
+
 
 class AgentGreedyImproved(AgentGreedy):
     def heuristic(self, env: WarehouseEnv, robot_id: int):
@@ -35,8 +46,9 @@ class AgentHardCoded(Agent):
     def __init__(self):
         self.step = 0
         # specifiy the path you want to check - if a move is illegal - the agent will choose a random move
-        self.trajectory = ["move north", "move east", "move north", "move north", "pick_up", "move east", "move east",
-                           "move south", "move south", "move south", "move south", "drop_off"]
+        self.trajectory = ["move east", "move north", "pick_up", "move north", "move west", "drop_off", "move north",
+                           "drop_off", "drop_off", "drop_off", "move north", "drop_off"]
+
 
     def run_step(self, env: WarehouseEnv, robot_id, time_limit):
         if self.step == len(self.trajectory):
