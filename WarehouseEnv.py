@@ -103,8 +103,6 @@ class WarehouseEnv(object):
         ops = []
         robot = self.robots[robot_index]
         robot_pos = robot.position
-        #if robot_index == 0 and robot.position == (1,3):
-        #    print("hi")
         if robot.battery > 0:
             for op_move, op_disp in [('move north', (0, -1)), ('move south', (0, 1)),
                                      ('move west', (-1, 0)), ('move east', (1, 0))]:
