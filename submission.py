@@ -177,6 +177,7 @@ class AgentExpectimax(Agent):
             prob_uniform = 1 / operators_number
             for op in legal_operators:
                 dict_prob[op] = prob_uniform
+        return dict_prob
 
     def rb_expectivemax(self, env: WarehouseEnv, my_agent_id, curr_agent_id, depth, act, finish_time):
         if time.time() >= finish_time:
@@ -198,7 +199,7 @@ class AgentExpectimax(Agent):
 
         else:
             operators, children = self.successors(env, curr_agent_id)
-            dict_prob = curr_agent_id(operators)
+            dict_prob = self.calc_prob(operators)
             for child, op in zip(children, operators):
                 expective = sum(dict_prob[op] * (self.rb_expectivemax(child, my_agent_id, (curr_agent_id + 1) % 2,
                                                                      depth - 1, op, finish_time)[0]))
